@@ -4,22 +4,24 @@ import java.util.Arrays;
 
 public class Books {
     private Book[] bookArray;
+    private int counter = 0;
 
     public Books(int bookArrayLenght) {
         this.bookArray = new Book[bookArrayLenght];
     }
 
     public void addBook(Book bookToAdd) {
-        for (int i = 0; i < bookArray.length; i++) {
-            if (bookArray[i] == null) {
-                bookArray[i] = bookToAdd;
-                break;
+             if (counter < bookArray.length) {
+                bookArray[counter++] = bookToAdd;
             }
         }
-    }
 
     public void viewAllBooks() {
-        for (int i = 0; i < bookArray.length; i++) {
+        if (counter == 0) {
+            System.out.println("No books were found.");
+            return;
+        }
+        for (int i = 0; i < counter; i++) {
             bookArray[i].view();
         }
     }
@@ -32,12 +34,11 @@ public class Books {
         }
     }
 
-    public Book[] searchBooksByAuthor(String authorName) {
-        Book[] resultArray = new Book[0];
-        for (int i = 0; i < bookArray.length; i++) {
-            if (bookArray[i].getAuthorName().equals(authorName)) {
-                resultArray = Arrays.copyOf(resultArray, resultArray.length + 1);
-                resultArray[resultArray.length - 1] = bookArray[i];
+    public Books[] searchBooksByAuthor(String authorName) {
+        Books resultArray = new Books(counter);
+        for (int i = 0; i < counter; i++) {
+            if (bookArray[i].getAuthorName().equalsIgnoreCase(authorName)) {
+                resultArray.addBook(bookArray[i]);
             }
         }
         return resultArray;
